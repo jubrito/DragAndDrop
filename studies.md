@@ -1,4 +1,4 @@
-# TS Commands
+# TypeScript Commands
 
 Initialize as typescript project
 
