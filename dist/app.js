@@ -32,6 +32,13 @@ class AccountingDepartment extends Department {
         this.reports = reports;
         this.lastReport = reports[0];
     }
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+        this.instance = new AccountingDepartment('3', []);
+        return this.instance;
+    }
     get mostRecentReport() {
         if (this.lastReport) {
             return this.lastReport;
@@ -63,7 +70,8 @@ class AccountingDepartment extends Department {
 }
 const employee1 = Department.createEmployee('Max');
 console.log(Department.fiscalYear);
-const accounting = new AccountingDepartment('2', []);
+const accounting = AccountingDepartment.getInstance();
+console.log(accounting);
 accounting.describe();
 accounting.addEmployee('Juliana');
 accounting.addEmployee('Isabel');

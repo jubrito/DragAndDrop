@@ -30,12 +30,22 @@ class ITDepartment extends Department {
     }
 }
 
+// Singleton = only 1 instance allowed
 class AccountingDepartment extends Department {
     private lastReport: string;
-
-    constructor (id: string, private reports: string[]) {
+    private static instance: AccountingDepartment;
+    // A private constructor ensures we can't call a newAccountingDepartment outside the class, only on static methods
+    private constructor (id: string, private reports: string[]) {
         super(id, 'Accounting');
         this.lastReport = reports[0]
+    }
+
+    static getInstance() {
+        if (this.instance){
+            return this.instance;
+        }
+        this.instance = new AccountingDepartment('3', []);
+        return this.instance;
     }
 
     get mostRecentReport(){
@@ -76,7 +86,8 @@ class AccountingDepartment extends Department {
 const employee1 = Department.createEmployee('Max');
 console.log(Department.fiscalYear)
 
-const accounting = new AccountingDepartment('2', [])
+const accounting = AccountingDepartment.getInstance();
+console.log(accounting);
 accounting.describe(); 
 accounting.addEmployee('Juliana')
 accounting.addEmployee('Isabel')
