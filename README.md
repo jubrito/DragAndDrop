@@ -1,3 +1,5 @@
+git push --set-upstream git@github.com:jubrito/TypeScript.git main
+
 # TypeScript Commands
 
 Initialize as typescript project
