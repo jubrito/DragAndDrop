@@ -1,18 +1,18 @@
 // describes the structure of an object
-interface Person {
+interface Greetable {
     name: string;
-    age: number;
     greet(phrase: string): void;
 }
 
-let user1: Person;
+class Person implements Greetable {
+    constructor(public name: string, public age: number) {}
 
-user1 = {
-    name: 'Juliana',
-    age: 26,
     greet(phrase: string) {
         console.log(phrase+ ' ' + this.name)
     }
 }
 
+let user1: Person
+user1 = new Person("Juliana", 26);
 user1.greet('Hi, my name is')
+console.log(user1);
