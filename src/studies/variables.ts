@@ -1,3 +1,4 @@
+
 // LET: Introduces the Block Scope concept when compared to Var
 function functionScope () {
     let letVariableOnlyExistsInsideFunction = true;
