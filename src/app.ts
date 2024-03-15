@@ -1,40 +1,36 @@
-type AddFn = (a: number, b: number) => number;
-interface AddFnAsInterface {
-    (a: number, b: number): number;
+// Intersection types -------------
+type Admin = {
+    name: string;
+    priviledges: string[];
+};
+
+type Employee = {
+    name: string;
+    startDate: Date;
 }
 
-let add: AddFn;
+type ElevatedEmployee = Admin & Employee;
 
-add = (n1: number, n2: number) => {
-    return n1 + n2
+const e1: ElevatedEmployee = {
+    name: "Juliana",
+    priviledges: ['create server'],
+    startDate: new Date()
 }
 
-interface Named {
-    readonly name: string;
-    outputName?: string;
+interface Admin2 {
+    name: string;
+    privledges: string[];
 }
 
-// describes the structure of an object
-interface Greetable extends Named {
-    greet(phrase: string): void;
+interface Employee2 {
+    name: string;
+    startDate: Date;
 }
 
-class Person implements Greetable {
-    constructor(public name: string, public age?: number) {
-        if (age) {
-            this.age = age;
-        }
-    }
+type ElevatedEmployee2V1 = Admin2 & Employee2;
+interface ElevatedEmployee2V2 extends Admin2, Employee2 {}
 
-    greet(phrase: string) {
-        console.log(phrase+ ' ' + this.name)
-        if (this.age) {
-            console.log("My age is "+this.age)
-        }
-    }
-}
+type Combinable = string | number;
+type Numeric = number | boolean;
 
-let user1: Greetable;
-user1 = new Person("Juliana", 26);
-user1.greet('Hi, my name is')
-console.log(user1);
+type Universal = Combinable & Numeric;
