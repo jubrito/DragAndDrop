@@ -1,14 +1,10 @@
 "use strict";
-function moveAnimal(animal) {
-    let speed;
-    switch (animal.type) {
-        case 'bird':
-            speed = animal.flyingSpeed;
-            break;
-        case 'horse':
-            speed = animal.runningSpeed;
-    }
-    console.log('Animal is moving at speed ' + speed);
+const userInputElementNotSureIsNullV1 = document.getElementById('user-input');
+const userInputElementNotSureIsNullV2 = document.getElementById('user-input');
+const userInputElementNotSureIsNullV3 = document.getElementById('user-input');
+userInputElementNotSureIsNullV1.value = 'Type casting v1 (with ! and <>)';
+userInputElementNotSureIsNullV2.value = 'Type casting v2 (with ! and as)';
+if (userInputElementNotSureIsNullV3) {
+    userInputElementNotSureIsNullV3.value = 'Type casting v3 (without ! and with as)';
 }
-moveAnimal({ type: 'bird', flyingSpeed: 101 });
 //# sourceMappingURL=app.js.map
