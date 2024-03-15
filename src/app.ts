@@ -10,6 +10,7 @@ type Employee = {
 }
 
 type ElevatedEmployee = Admin & Employee;
+type UnknownEmployee = Employee | Admin;
 
 const e1: ElevatedEmployee = {
     name: "Juliana",
@@ -19,7 +20,7 @@ const e1: ElevatedEmployee = {
 
 interface Admin2 {
     name: string;
-    privledges: string[];
+    priviledges: string[];
 }
 
 interface Employee2 {
@@ -34,3 +35,52 @@ type Combinable = string | number;
 type Numeric = number | boolean;
 
 type Universal = Combinable & Numeric;
+
+function adds(a: Combinable, b: Combinable) {
+    // Type guards
+    if (typeof a === 'string' || typeof b === 'string'){
+        return a.toString() + b.toString();
+    }
+    return a+b;
+}
+
+function printEmployeeInfo(emp: UnknownEmployee){
+    console.log('Name: ' + emp.name);
+    if ('priviledges' in emp){
+        console.log('Priviledges: ' + emp.priviledges);
+    }
+    if ('startDate' in emp){
+        console.log('Start date: ' + emp.startDate);
+    }
+}
+printEmployeeInfo(e1);
+
+class Car {
+    drive() {
+        console.log('Driving a car...')
+    }
+}
+class Truck {
+    drive() {
+        console.log('Driving a truck...')
+    }
+    loadCargo(amount: number){
+        console.log('Loading cargo... '+amount)
+    }
+}
+
+type Vehicle = Car | Truck;
+
+const v1 = new Car();
+const v2 = new Truck()
+
+function useVehicle(vehicle: Vehicle){
+    vehicle.drive();
+    if ('loadCargo' in vehicle) {
+        vehicle.loadCargo(1001);
+    }
+    if (vehicle instanceof Truck) {
+        vehicle.loadCargo(101);
+    }
+}
+useVehicle(v2)
