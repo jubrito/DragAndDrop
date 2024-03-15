@@ -7,4 +7,8 @@ userInputElementNotSureIsNullV2.value = 'Type casting v2 (with ! and as)';
 if (userInputElementNotSureIsNullV3) {
     userInputElementNotSureIsNullV3.value = 'Type casting v3 (without ! and with as)';
 }
+const errorBag = {
+    email: 'Not a valid email',
+    username: 'Must start with a capital character'
+};
 //# sourceMappingURL=app.js.map
