@@ -4,12 +4,6 @@ const e1 = {
     priviledges: ['create server'],
     startDate: new Date()
 };
-function adds(a, b) {
-    if (typeof a === 'string' || typeof b === 'string') {
-        return a.toString() + b.toString();
-    }
-    return a + b;
-}
 function printEmployeeInfo(emp) {
     console.log('Name: ' + emp.name);
     if ('priviledges' in emp) {

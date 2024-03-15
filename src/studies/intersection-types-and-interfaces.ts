@@ -31,19 +31,6 @@ interface Employee2 {
 type ElevatedEmployee2V1 = Admin2 & Employee2;
 interface ElevatedEmployee2V2 extends Admin2, Employee2 {}
 
-type Combinable = string | number;
-type Numeric = number | boolean;
-
-type Universal = Combinable & Numeric;
-
-function adds(a: Combinable, b: Combinable) {
-    // Type guards
-    if (typeof a === 'string' || typeof b === 'string'){
-        return a.toString() + b.toString();
-    }
-    return a+b;
-}
-
 function printEmployeeInfo(emp: UnknownEmployee){
     console.log('Name: ' + emp.name);
     // Both type guards are available
