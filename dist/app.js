@@ -27,4 +27,8 @@ function countAndDescribeElements(element) {
 console.log(countAndDescribeElements('Hi'));
 console.log(countAndDescribeElements(['Juju', 'Brito']));
 console.log(countAndDescribeElements([]));
+function extractAndConvert(obj, key) {
+    return `Key: "${String(key)}" of object ${JSON.stringify(obj)} is ${obj[key]}`;
+}
+console.log(extractAndConvert({ name: 'Ju' }, 'name'));
 //# sourceMappingURL=app.js.map

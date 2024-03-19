@@ -32,3 +32,10 @@ function countAndDescribeElements<T extends Lengthy>(element: T): [T, string]{
 console.log(countAndDescribeElements('Hi'))
 console.log(countAndDescribeElements(['Juju', 'Brito']))
 console.log(countAndDescribeElements([]))
+
+function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U){
+    return `Key: "${String(key)}" of object ${JSON.stringify(obj)} is ${obj[key]}`
+}
+
+// extractAndConvert({}, 'name');
+console.log(extractAndConvert({name: 'Ju'}, 'name'))
