@@ -31,4 +31,32 @@ function extractAndConvert(obj, key) {
     return `Key: "${String(key)}" of object ${JSON.stringify(obj)} is ${obj[key]}`;
 }
 console.log(extractAndConvert({ name: 'Ju' }, 'name'));
+class DataStorage {
+    constructor() {
+        this.data = [];
+    }
+    addItem(item) {
+        this.data.push(item);
+    }
+    removeItem(item) {
+        if (this.data.indexOf(item)) {
+            this.data.splice(this.data.indexOf(item), 1);
+        }
+    }
+    getItems() {
+        return [...this.data];
+    }
+}
+const textStorage = new DataStorage();
+textStorage.addItem('Ju');
+textStorage.addItem('Bel');
+textStorage.addItem('Gabi');
+textStorage.removeItem('Gabi');
+console.log(textStorage.getItems());
+const numberAndTextStorage = new DataStorage();
+numberAndTextStorage.addItem(101);
+numberAndTextStorage.addItem('Favorite Number');
+numberAndTextStorage.addItem(1001);
+numberAndTextStorage.removeItem(1001);
+console.log(numberAndTextStorage.getItems());
 //# sourceMappingURL=app.js.map

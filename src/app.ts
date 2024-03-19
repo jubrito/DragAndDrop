@@ -39,3 +39,43 @@ function extractAndConvert<T extends object, U extends keyof T>(obj: T, key: U){
 
 // extractAndConvert({}, 'name');
 console.log(extractAndConvert({name: 'Ju'}, 'name'))
+
+class DataStorage<T extends string | number | boolean> {
+    private data: T[] = [];
+
+    addItem (item: T) {
+        this.data.push(item)
+    }
+
+    removeItem (item: T) {
+        if (this.data.indexOf(item)) {
+            this.data.splice(this.data.indexOf(item), 1)
+        }
+    }
+
+    getItems() {
+        return [...this.data]; // copy of data with spread
+    }
+}
+
+const textStorage = new DataStorage<string>();
+textStorage.addItem('Ju');
+textStorage.addItem('Bel');
+textStorage.addItem('Gabi');
+textStorage.removeItem('Gabi');
+console.log(textStorage.getItems())
+
+const numberAndTextStorage = new DataStorage<number | string>();
+numberAndTextStorage.addItem(101)
+numberAndTextStorage.addItem('Favorite Number')
+numberAndTextStorage.addItem(1001)
+numberAndTextStorage.removeItem(1001);
+console.log(numberAndTextStorage.getItems())
+
+// Not allowed anymore after extending primitive values:
+// const objStorage = new DataStorage<object>();
+// const gabiObj = {name: 'Gabi'};
+// objStorage.addItem({name: 'Bat Rep'})
+// objStorage.addItem(gabiObj)
+// objStorage.removeItem(gabiObj) // since objects and references we need to pass the exact one instead of 'creating a new one' by passing {name: 'Gabi'} when calling add and remove
+// console.log(objStorage.getItems())
