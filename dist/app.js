@@ -59,4 +59,12 @@ numberAndTextStorage.addItem('Favorite Number');
 numberAndTextStorage.addItem(1001);
 numberAndTextStorage.removeItem(1001);
 console.log(numberAndTextStorage.getItems());
+function createCourseGoal(title, description, completeUntil) {
+    let courseGoal = {};
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = completeUntil;
+    return courseGoal;
+}
+const namesArray = ['Ju', 'Bel', 'Gabi'];
 //# sourceMappingURL=app.js.map

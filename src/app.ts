@@ -1,3 +1,4 @@
+/// Generic types gives flexibility with type safety
 const names: Array<string> = ['Ju', 'Bel', 'Gabi'];
 const promise: Promise<string> = new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -79,3 +80,25 @@ console.log(numberAndTextStorage.getItems())
 // objStorage.addItem(gabiObj)
 // objStorage.removeItem(gabiObj) // since objects and references we need to pass the exact one instead of 'creating a new one' by passing {name: 'Gabi'} when calling add and remove
 // console.log(objStorage.getItems())
+
+
+// Generic Utility Types ------------------
+interface CourseGoal {
+    title: string;
+    description: string;
+    completeUntil: Date;
+}
+
+// PARTIAL
+function createCourseGoal (title: string, description: string, completeUntil: Date): CourseGoal {
+    let courseGoal: Partial<CourseGoal> = {}; // this is an object with temporaraly optional properties that in the end will be a CourseGoal
+    courseGoal.title = title;
+    courseGoal.description = description;
+    courseGoal.completeUntil = completeUntil;
+    return courseGoal as CourseGoal;
+    // return {title: title, description: description, completeUntil: completeUntil}
+}
+
+// READONLY
+const namesArray: Readonly<string[]> = ['Ju', 'Bel', 'Gabi'];
+// namesArray.push('Boyfriend X');
