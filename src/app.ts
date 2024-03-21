@@ -23,8 +23,8 @@ function WithTemplate(template: string, hookId: string) {
             hookElement.innerHTML = template;
             hookElement.querySelector('h1')!.textContent = person.name;
         }
-    }
-}
+    }}
+
 
 @Logger
 @LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES')
