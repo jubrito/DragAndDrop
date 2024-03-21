@@ -8,6 +8,7 @@ function Logger(constructor: Function) {
 function LoggerFactory(logString: string) {
     // customizes decorator values
     return function(constructor: Function) {
+        console.log('Loggin with factory...');
         console.log(logString);
         console.log(constructor);
     }
@@ -15,6 +16,7 @@ function LoggerFactory(logString: string) {
 
 function WithTemplate(template: string, hookId: string) {
     return function(constructor: any) {
+        console.log('Loggin with template...');
         const hookElement = document.getElementById(hookId)
         const person = new constructor();
         if (hookElement) {
@@ -24,8 +26,8 @@ function WithTemplate(template: string, hookId: string) {
     }
 }
 
-// @Logger
-// @LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES')
+@Logger
+@LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES')
 @WithTemplate('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
 class Person {
     name = 'Ju';

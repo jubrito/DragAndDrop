@@ -11,12 +11,14 @@ function Logger(constructor) {
 }
 function LoggerFactory(logString) {
     return function (constructor) {
+        console.log('Loggin with factory...');
         console.log(logString);
         console.log(constructor);
     };
 }
 function WithTemplate(template, hookId) {
     return function (constructor) {
+        console.log('Loggin with template...');
         const hookElement = document.getElementById(hookId);
         const person = new constructor();
         if (hookElement) {
@@ -32,6 +34,8 @@ let Person = class Person {
     }
 };
 Person = __decorate([
+    Logger,
+    LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES'),
     WithTemplate('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
 ], Person);
 const person = new Person();
