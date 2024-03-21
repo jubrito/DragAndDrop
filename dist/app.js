@@ -125,15 +125,13 @@ const printer = new PrinterWithoutAutomaticBinder();
 const button = document.querySelector('button');
 button.addEventListener('click', printer.showMessageWhenBinding);
 const registeredValidators = {};
-function DecoratorForRequired(target, propertyName) {
-    registeredValidators[target.constructor.name] = {
-        [propertyName]: ['required']
-    };
+function Required(target, propName) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { [propName]: [...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[propName]) !== null && _b !== void 0 ? _b : []), 'required'] });
 }
-function DecoratorForPositiveNumbers(target, propertyName) {
-    registeredValidators[target.constructor.name] = {
-        [propertyName]: ['positive']
-    };
+function PositiveNumber(target, propName) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { [propName]: [...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[propName]) !== null && _b !== void 0 ? _b : []), 'positive'] });
 }
 function validate(object) {
     const objectValidatorConfig = registeredValidators[object.constructor.name];
@@ -162,10 +160,10 @@ class Course {
     }
 }
 __decorate([
-    DecoratorForRequired
+    Required
 ], Course.prototype, "title", void 0);
 __decorate([
-    DecoratorForPositiveNumbers
+    PositiveNumber
 ], Course.prototype, "price", void 0);
 const courseForm = document.querySelector('form');
 courseForm === null || courseForm === void 0 ? void 0 : courseForm.addEventListener('submit', event => {

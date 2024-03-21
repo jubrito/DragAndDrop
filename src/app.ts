@@ -147,17 +147,18 @@ interface ValidatorConfig {
 
 const registeredValidators: ValidatorConfig = {};
 
-function DecoratorForRequired(target: any, propertyName: string) {
+function Required(target: any, propName: string) {
     registeredValidators[target.constructor.name] = {
-        [propertyName]: ['required']
-    };  // the prototype of the instance has a constructor function used to create a function used to create the object
-
+        ...registeredValidators[target.constructor.name],
+        [propName]: [...(registeredValidators[target.constructor.name]?.[propName] ?? []), 'required']
+    };
 }
-
-function DecoratorForPositiveNumbers(target: any, propertyName: string) {
+ 
+function PositiveNumber(target: any, propName: string) {
     registeredValidators[target.constructor.name] = {
-        [propertyName]: ['positive']
-    }
+        ...registeredValidators[target.constructor.name],
+        [propName]: [...(registeredValidators[target.constructor.name]?.[propName] ?? []), 'positive']
+    };
 }
 
 function validate(object: any) {
@@ -182,9 +183,9 @@ function validate(object: any) {
 }
 
 class Course {
-    @DecoratorForRequired
+    @Required
     title: string;
-    @DecoratorForPositiveNumbers
+    @PositiveNumber
     price: number;
 
     constructor(t: string, p: number) {
