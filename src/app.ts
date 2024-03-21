@@ -102,3 +102,36 @@ class Product {
 
 const product1 = new Product('Book', 11);
 const product2 = new Product ('Magazine', 1);
+
+// set the 'this' keyword to the object this method belongs to
+function DecoratorToAutoBind(_target: any, _methodName: string | Symbol, descriptorWithValueThatHoldsTheOriginalFunction: PropertyDescriptor){
+    // the value property on the descriptor points to the method function
+    const originalMethod = descriptorWithValueThatHoldsTheOriginalFunction.value;
+    const newDescriptor: PropertyDescriptor = {
+        configurable: true,
+        enumerable: false, // doesn't show up in 'for in' loops
+        get() { // extra logic that runs before the value is returned
+            const boundFunction = originalMethod.bind(this);
+            // 'this' here refers to whatever is responsible for triggering getter method 
+            // the getted method will be triggered by the concrete object to which it belongs
+            // 'this' here = object on which we define the getter
+            return boundFunction;
+        }
+    }
+    return newDescriptor; // overwrites the old descriptor
+}
+
+class PrinterWithoutAutomaticBinder {
+    bindExample = 'Binds makes the "this" refers to the p object and not to the event listener function!'
+
+    @DecoratorToAutoBind
+    showMessageWhenBinding() {
+        console.log(this.bindExample);
+    }
+}
+
+const printer = new PrinterWithoutAutomaticBinder();
+const button = document.querySelector('button')!;
+// Without a Decorator to bind, we must force it when calling the function:
+// button.addEventListener('click', printer.showMessageWhenBinding.bind(printer));
+button.addEventListener('click', printer.showMessageWhenBinding);

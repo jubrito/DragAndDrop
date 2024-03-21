@@ -98,4 +98,30 @@ __decorate([
 ], Product.prototype, "getPriceWithTax", null);
 const product1 = new Product('Book', 11);
 const product2 = new Product('Magazine', 1);
+function DecoratorToAutoBind(_target, _methodName, descriptorWithValueThatHoldsTheOriginalFunction) {
+    const originalMethod = descriptorWithValueThatHoldsTheOriginalFunction.value;
+    const newDescriptor = {
+        configurable: true,
+        enumerable: false,
+        get() {
+            const boundFunction = originalMethod.bind(this);
+            return boundFunction;
+        }
+    };
+    return newDescriptor;
+}
+class PrinterWithoutAutomaticBinder {
+    constructor() {
+        this.bindExample = 'Binds makes the "this" refers to the p object and not to the event listener function!';
+    }
+    showMessageWhenBinding() {
+        console.log(this.bindExample);
+    }
+}
+__decorate([
+    DecoratorToAutoBind
+], PrinterWithoutAutomaticBinder.prototype, "showMessageWhenBinding", null);
+const printer = new PrinterWithoutAutomaticBinder();
+const button = document.querySelector('button');
+button.addEventListener('click', printer.showMessageWhenBinding);
 //# sourceMappingURL=app.js.map
