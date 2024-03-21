@@ -14,21 +14,29 @@ function LoggerFactory(logString: string) {
     }
 }
 
-function WithTemplate(template: string, hookId: string) {
-    return function(constructor: any) {
-        console.log('Loggin with template...');
-        const hookElement = document.getElementById(hookId)
-        const person = new constructor();
-        if (hookElement) {
-            hookElement.innerHTML = template;
-            hookElement.querySelector('h1')!.textContent = person.name;
+function DecoratorFactoryWithFunctionThatOnlyRunsWhenInstanciatingAnObject(template: string, hookId: string) {
+    console.log('Template factory');
+    return function<T extends {new(...args: any[]): {name: string}}>(originalConstructor: T) {
+        // outside the 'class extends' we don't need to initiate the object for the decorator to run since it happens when the function is defined
+        return class extends originalConstructor {
+            // new constructor to add new functionality to class original constructor () {}
+            // Logic that will only be added after instantiating:
+            constructor(..._: any[]) {
+                super();
+                const hookElement = document.getElementById(hookId)
+                if (hookElement) {
+                    hookElement.innerHTML = template;
+                    hookElement.querySelector('h1')!.textContent = this.name;
+                }
+            }
         }
-    }}
+    }
+}
 
 
 @Logger
 @LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES')
-@WithTemplate('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
+@DecoratorFactoryWithFunctionThatOnlyRunsWhenInstanciatingAnObject('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
 class Person {
     name = 'Ju';
     constructor() {
@@ -91,3 +99,6 @@ class Product {
         return this._price * (1+tax);
     }
 }
+
+const product1 = new Product('Book', 11);
+const product2 = new Product ('Magazine', 1);

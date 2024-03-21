@@ -19,15 +19,19 @@ function LoggerFactory(logString) {
         console.log(constructor);
     };
 }
-function WithTemplate(template, hookId) {
-    return function (constructor) {
-        console.log('Loggin with template...');
-        const hookElement = document.getElementById(hookId);
-        const person = new constructor();
-        if (hookElement) {
-            hookElement.innerHTML = template;
-            hookElement.querySelector('h1').textContent = person.name;
-        }
+function DecoratorFactoryWithFunctionThatOnlyRunsWhenInstanciatingAnObject(template, hookId) {
+    console.log('Template factory');
+    return function (originalConstructor) {
+        return class extends originalConstructor {
+            constructor(..._) {
+                super();
+                const hookElement = document.getElementById(hookId);
+                if (hookElement) {
+                    hookElement.innerHTML = template;
+                    hookElement.querySelector('h1').textContent = this.name;
+                }
+            }
+        };
     };
 }
 let Person = class Person {
@@ -39,7 +43,7 @@ let Person = class Person {
 Person = __decorate([
     Logger,
     LoggerFactory('LOGGIN USING A DECORATOR FACTORY WHICH ALLOWS CUSTOM VARIABLE VALUES'),
-    WithTemplate('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
+    DecoratorFactoryWithFunctionThatOnlyRunsWhenInstanciatingAnObject('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
 ], Person);
 const person = new Person();
 console.log(person);
@@ -92,4 +96,6 @@ __decorate([
     LogDecoratorForMethods,
     __param(0, LogDecoratorForParameters)
 ], Product.prototype, "getPriceWithTax", null);
+const product1 = new Product('Book', 11);
+const product2 = new Product('Magazine', 1);
 //# sourceMappingURL=app.js.map
