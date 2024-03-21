@@ -129,7 +129,7 @@ interface Greetable extends Named {
     greet(phrase: string): void;
 }
 
-class Person implements Greetable {
+class Human implements Greetable {
     constructor(public name: string, public age?: number) {
         if (age) {
             this.age = age;
@@ -145,6 +145,6 @@ class Person implements Greetable {
 }
 
 let user1: Greetable;
-user1 = new Person("Juliana", 26);
+user1 = new Human("Juliana", 26);
 user1.greet('Hi, my name is')
 console.log(user1);

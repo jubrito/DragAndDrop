@@ -92,7 +92,7 @@ let add;
 add = (n1, n2) => {
     return n1 + n2;
 };
-class Person {
+class Human {
     constructor(name, age) {
         this.name = name;
         this.age = age;
@@ -108,7 +108,7 @@ class Person {
     }
 }
 let user1;
-user1 = new Person("Juliana", 26);
+user1 = new Human("Juliana", 26);
 user1.greet('Hi, my name is');
 console.log(user1);
 //# sourceMappingURL=classes.js.map

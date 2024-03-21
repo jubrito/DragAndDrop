@@ -1,70 +1,23 @@
 "use strict";
-const names = ['Ju', 'Bel', 'Gabi'];
-const promise = new Promise((resolve, reject) => {
-    setTimeout(() => {
-        resolve('This is done!');
-    }, 200);
-    reject('Rejected');
-});
-promise.then(data => {
-    data.split(' ');
-});
-function merge(objA, objB) {
-    return Object.assign(objA, objB);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+function Logger(constructor) {
+    console.log('Loggin...');
+    console.log(constructor);
 }
-const mergedObj = merge({ name: 'Ju', hobbies: ['lol'] }, { age: 26 });
-console.log(mergedObj);
-function countAndDescribeElements(element) {
-    let descriptionText = 'Got no value since length is zero';
-    if (element.length === 1) {
-        descriptionText = 'Got 1 element';
-    }
-    else if (element.length > 0) {
-        descriptionText = `Got ${element.length} elements`;
-    }
-    return [element, descriptionText];
-}
-console.log(countAndDescribeElements('Hi'));
-console.log(countAndDescribeElements(['Juju', 'Brito']));
-console.log(countAndDescribeElements([]));
-function extractAndConvert(obj, key) {
-    return `Key: "${String(key)}" of object ${JSON.stringify(obj)} is ${obj[key]}`;
-}
-console.log(extractAndConvert({ name: 'Ju' }, 'name'));
-class DataStorage {
+let Person = class Person {
     constructor() {
-        this.data = [];
+        this.name = 'Ju';
+        console.log('Creating person object...');
     }
-    addItem(item) {
-        this.data.push(item);
-    }
-    removeItem(item) {
-        if (this.data.indexOf(item)) {
-            this.data.splice(this.data.indexOf(item), 1);
-        }
-    }
-    getItems() {
-        return [...this.data];
-    }
-}
-const textStorage = new DataStorage();
-textStorage.addItem('Ju');
-textStorage.addItem('Bel');
-textStorage.addItem('Gabi');
-textStorage.removeItem('Gabi');
-console.log(textStorage.getItems());
-const numberAndTextStorage = new DataStorage();
-numberAndTextStorage.addItem(101);
-numberAndTextStorage.addItem('Favorite Number');
-numberAndTextStorage.addItem(1001);
-numberAndTextStorage.removeItem(1001);
-console.log(numberAndTextStorage.getItems());
-function createCourseGoal(title, description, completeUntil) {
-    let courseGoal = {};
-    courseGoal.title = title;
-    courseGoal.description = description;
-    courseGoal.completeUntil = completeUntil;
-    return courseGoal;
-}
-const namesArray = ['Ju', 'Bel', 'Gabi'];
+};
+Person = __decorate([
+    Logger
+], Person);
+const person = new Person();
+console.log(person);
 //# sourceMappingURL=app.js.map
