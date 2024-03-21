@@ -31,7 +31,6 @@ function WithTemplate(template: string, hookId: string) {
 @WithTemplate('<h1>Using a template factory to render HTML on the screen</h1>', 'app')
 class Person {
     name = 'Ju';
-    
     constructor() {
         console.log('Creating person object...')
     }
