@@ -124,4 +124,61 @@ __decorate([
 const printer = new PrinterWithoutAutomaticBinder();
 const button = document.querySelector('button');
 button.addEventListener('click', printer.showMessageWhenBinding);
+const registeredValidators = {};
+function DecoratorForRequired(target, propertyName) {
+    registeredValidators[target.constructor.name] = {
+        [propertyName]: ['required']
+    };
+}
+function DecoratorForPositiveNumbers(target, propertyName) {
+    registeredValidators[target.constructor.name] = {
+        [propertyName]: ['positive']
+    };
+}
+function validate(object) {
+    const objectValidatorConfig = registeredValidators[object.constructor.name];
+    if (!objectValidatorConfig) {
+        return true;
+    }
+    let isValid = true;
+    for (const property in objectValidatorConfig) {
+        for (const validator of objectValidatorConfig[property]) {
+            switch (validator) {
+                case 'required':
+                    isValid = isValid && !!object[property];
+                    break;
+                case 'positive':
+                    isValid = isValid && object[property] > 0;
+                    break;
+            }
+        }
+    }
+    return isValid;
+}
+class Course {
+    constructor(t, p) {
+        this.title = t;
+        this.price = p;
+    }
+}
+__decorate([
+    DecoratorForRequired
+], Course.prototype, "title", void 0);
+__decorate([
+    DecoratorForPositiveNumbers
+], Course.prototype, "price", void 0);
+const courseForm = document.querySelector('form');
+courseForm === null || courseForm === void 0 ? void 0 : courseForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const titleElement = document.getElementById('title');
+    const priceElement = document.getElementById('price');
+    const title = titleElement.value;
+    const price = +priceElement.value;
+    const createdCourse = new Course(title, price);
+    if (!validate(createdCourse)) {
+        alert('Invalid input, please try again!');
+        return;
+    }
+    console.log(createdCourse);
+});
 //# sourceMappingURL=app.js.map
