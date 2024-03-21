@@ -39,13 +39,37 @@ class Person {
 const person = new Person();
 console.log(person);
 
-function Log(target: any, propertyName: string | Symbol) {
+function LogDecoratorForProperties(target: any, propertyName: string | Symbol) {
     console.log('Property decorator');
     console.log(target, propertyName);
 }
+function LogDecoratorForAccessors(target: any, accessorName: string, propertyDescriptor: PropertyDescriptor){
+    // The target is the prototype if we are dealing with an instance accessor 
+    // The target is the constructor if we are dealing with a static accessor
+    console.log('Accessor decorator');
+    console.log(target);
+    console.log(accessorName);
+    console.log(propertyDescriptor);
+}
+
+function LogDecoratorForMethods(target: any, methodName: string | Symbol, methodDescriptor: PropertyDescriptor){
+    // If is an instance method the target is the prototype of the object
+    // If is a static method the target is the constructor
+    console.log('Method decorator');
+    console.log(target);
+    console.log(methodName);
+    console.log(methodDescriptor);
+}
+
+function LogDecoratorForParameters(target: any, methodName: string | Symbol, positionOfTheArgument: number) {
+    console.log('Parameter decorator');
+    console.log(target);
+    console.log(methodName);
+    console.log(positionOfTheArgument);
+}
 
 class Product {
-    @Log
+    @LogDecoratorForProperties
     title: string;
     private _price: number
     constructor(t: string, p: number) {
@@ -53,7 +77,8 @@ class Product {
         this._price = p;
     }
 
-    set price (val: number){
+    @LogDecoratorForAccessors
+    set price (val: number){ // price is the Accessor
         if (val > 0){
             this.price = val;
         } else {
@@ -61,7 +86,8 @@ class Product {
         }
     }
 
-    getPriceWithTax(tax: number) {
+    @LogDecoratorForMethods
+    getPriceWithTax(@LogDecoratorForParameters tax: number) {
         return this._price * (1+tax);
     }
 }
