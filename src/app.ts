@@ -13,6 +13,36 @@ function AutoBind(_target: any, _propertyName: string | Symbol, descriptorWithOr
     return descriptorWithAutoBind;
 }
 
+interface Validatable {
+    value: string | number;
+    required?: boolean;
+    minLength?: number;
+    maxLength?: number;
+    minValue?: number;
+    maxValue?: number;
+    // [property: string]: string | boolean | number; 
+}
+function validatesProps(validatableInput: Validatable) {
+    let isValid = true;
+    if (validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+    if (validatableInput.minLength != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.length >= validatableInput.minLength; 
+    }
+    if (validatableInput.maxLength != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.length <= validatableInput.maxLength;
+    }
+    if (validatableInput.minValue != null && typeof validatableInput.value === 'number'){
+        isValid = isValid && validatableInput.value >= validatableInput.minValue;
+    }
+    if (validatableInput.maxValue != null && typeof validatableInput.value === 'number'){
+        isValid = isValid && validatableInput.value <= validatableInput.maxValue;
+    }
+    return isValid;
+}
+// ({value: enteredTitle, required: true, minLength: 5})
+
 class ProjectInput {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
@@ -42,7 +72,26 @@ class ProjectInput {
         const enteredTitle = this.titleInputElement.value;
         const enteredDescription = this.descriptionInputElement.value;
         const enteredPeople = this.peopleInputElement.value;
-        if (enteredTitle.trim().length === 0 || enteredDescription.trim().length === 0 || enteredPeople.trim().length === 0) {
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true
+        };
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            required: true,
+            minLength: 5,
+        };
+        const peopleValidatable: Validatable = {
+            value: enteredPeople,
+            required: true,
+            minValue: 1,
+            maxValue: 5
+        };
+        if (
+            !validatesProps(titleValidatable) ||
+            !validatesProps(descriptionValidatable) ||
+            !validatesProps(peopleValidatable)
+        ) {
             alert('Invalid input, please try again');
             return;
         }
@@ -80,37 +129,3 @@ class ProjectInput {
 }
 
 const projectInput = new ProjectInput();
-
-// class ProjectInput {
-//     title: string;
-//     description: string;
-//     people: number;
-
-//     constructor(t: string, d: string, p: number) {
-//         this.title = t;
-//         this.description = d;
-//         this.people = p;
-//     }
-// }
-
-// const projectInputTemplate = document.getElementById('project-input')?.innerHTML!;
-
-// const app = document.getElementById('app')!;
-
-// if (app) {
-//     app.innerHTML = projectInputTemplate;
-// }
-
-// const projectTitle = document.getElementById('title') as HTMLInputElement;
-// const projectDescription = document.getElementById('description') as HTMLTextAreaElement;
-// const projectPeople = document.getElementById('people') as HTMLInputElement;
-// interface Projects {
-    //     title: string;
-    //     description: string;
-    //     people: number;
-    // }
-    
-    // let projects: Array<Projects> = [];
-    
-    
-   
