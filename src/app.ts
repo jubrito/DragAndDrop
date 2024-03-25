@@ -1,3 +1,52 @@
+class ProjectStateManagement {
+    private projects: any[] = [];
+    private static instance: ProjectStateManagement;
+    private listeners: any[] = [];
+
+    private constructor(){
+
+    }
+
+    static getInstance (){
+        if (this.instance){
+            return this.instance;
+        } 
+        this.instance = new ProjectStateManagement();
+        return this.instance;
+    }
+
+    addListener(listenerFn: Function){
+        this.listeners.push(listenerFn);
+    }
+
+    public addProject(title: string, description: string, numberOfPeople: number){
+        const newProject = {
+            id: Math.random().toString(),
+            title: title,
+            description: description, 
+            people: numberOfPeople
+        }
+        this.projects.push(newProject);
+        for (const listernerFn of this.listeners) {
+            const projectsCopy = this.projects.slice()
+            listernerFn(projectsCopy); 
+        }
+    }
+}
+// class Project {
+//     title: string;
+//     description: string;
+//     people: number;
+
+//     constructor(t: string, d: string, p: number) {
+//         this.title = t;
+//         this.description = d;
+//         this.people = p;
+//     }
+// }
+
+const projectStateManagement = ProjectStateManagement.getInstance();
+
 function AutoBind(_target: any, _propertyName: string | Symbol, descriptorWithOriginalFunction: PropertyDescriptor) {
     const originalFunction = descriptorWithOriginalFunction.value;
     const descriptorWithAutoBind: PropertyDescriptor = {
@@ -41,8 +90,48 @@ function validatesProps(validatableInput: Validatable) {
     }
     return isValid;
 }
-// ({value: enteredTitle, required: true, minLength: 5})
 
+class ProjectList {
+    templateElement: HTMLTemplateElement;
+    hostElement: HTMLDivElement;
+    element: HTMLElement;
+    assignedProjects: any [];
+
+    constructor (private projectType: 'active' | 'finished'){
+        this.templateElement = document.getElementById('project-list') as HTMLTemplateElement;
+        this.hostElement = document.getElementById('app') as HTMLDivElement;
+        this.assignedProjects = [];
+        const importAllLevelsOfNestingInside = true;
+        const importedNode = document.importNode(this.templateElement.content, importAllLevelsOfNestingInside);
+        this.element = importedNode.firstElementChild as HTMLElement;
+        this.element.id = `${projectType}-projects`;
+
+        projectStateManagement.addListener((projects: any[]) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        })
+        this.attach();
+        this.renderContent();
+    }
+
+    private renderProjects() {
+        const listElement = document.getElementById(`${this.projectType}-projects-list`) as HTMLUListElement;
+        for (const projectItem of this.assignedProjects) {
+            const listItem = document.createElement('li');
+            listItem.textContent = projectItem.title;
+            listElement?.appendChild(listItem);
+        }
+    }
+
+    private attach() {
+        this.hostElement.insertAdjacentElement("beforeend", this.element)
+    }
+    private renderContent() {
+        const listId = `${this.projectType}-projects-list`;
+        this.element.querySelector('ul')!.id = listId;
+        this.element.querySelector('h2')!.textContent = this.projectType.toUpperCase() + ' PROJECTS';
+    }
+}
 class ProjectInput {
     templateElement: HTMLTemplateElement;
     hostElement: HTMLDivElement;
@@ -113,7 +202,7 @@ class ProjectInput {
         const userInput = this.gatherUserInput();
         if (Array.isArray(userInput)) {
             const [title, description, people] = userInput;
-            console.log(title, description, people);
+            projectStateManagement.addProject(title, description, people);
             this.clearInputs();
         }
     }
@@ -129,3 +218,5 @@ class ProjectInput {
 }
 
 const projectInput = new ProjectInput();
+const activeProjectList = new ProjectList('active');
+const finishedProjectList = new ProjectList('finished');

@@ -5,6 +5,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+class ProjectStateManagement {
+    constructor() {
+        this.projects = [];
+        this.listeners = [];
+    }
+    static getInstance() {
+        if (this.instance) {
+            return this.instance;
+        }
+        this.instance = new ProjectStateManagement();
+        return this.instance;
+    }
+    addListener(listenerFn) {
+        this.listeners.push(listenerFn);
+    }
+    addProject(title, description, numberOfPeople) {
+        const newProject = {
+            id: Math.random().toString(),
+            title: title,
+            description: description,
+            people: numberOfPeople
+        };
+        this.projects.push(newProject);
+        for (const listernerFn of this.listeners) {
+            const projectsCopy = this.projects.slice();
+            listernerFn(projectsCopy);
+        }
+    }
+}
+const projectStateManagement = ProjectStateManagement.getInstance();
 function AutoBind(_target, _propertyName, descriptorWithOriginalFunction) {
     const originalFunction = descriptorWithOriginalFunction.value;
     const descriptorWithAutoBind = {
@@ -34,6 +64,40 @@ function validatesProps(validatableInput) {
         isValid = isValid && validatableInput.value <= validatableInput.maxValue;
     }
     return isValid;
+}
+class ProjectList {
+    constructor(projectType) {
+        this.projectType = projectType;
+        this.templateElement = document.getElementById('project-list');
+        this.hostElement = document.getElementById('app');
+        this.assignedProjects = [];
+        const importAllLevelsOfNestingInside = true;
+        const importedNode = document.importNode(this.templateElement.content, importAllLevelsOfNestingInside);
+        this.element = importedNode.firstElementChild;
+        this.element.id = `${projectType}-projects`;
+        projectStateManagement.addListener((projects) => {
+            this.assignedProjects = projects;
+            this.renderProjects();
+        });
+        this.attach();
+        this.renderContent();
+    }
+    renderProjects() {
+        const listElement = document.getElementById(`${this.projectType}-projects-list`);
+        for (const projectItem of this.assignedProjects) {
+            const listItem = document.createElement('li');
+            listItem.textContent = projectItem.title;
+            listElement === null || listElement === void 0 ? void 0 : listElement.appendChild(listItem);
+        }
+    }
+    attach() {
+        this.hostElement.insertAdjacentElement("beforeend", this.element);
+    }
+    renderContent() {
+        const listId = `${this.projectType}-projects-list`;
+        this.element.querySelector('ul').id = listId;
+        this.element.querySelector('h2').textContent = this.projectType.toUpperCase() + ' PROJECTS';
+    }
 }
 class ProjectInput {
     constructor() {
@@ -90,7 +154,7 @@ class ProjectInput {
         const userInput = this.gatherUserInput();
         if (Array.isArray(userInput)) {
             const [title, description, people] = userInput;
-            console.log(title, description, people);
+            projectStateManagement.addProject(title, description, people);
             this.clearInputs();
         }
     }
@@ -105,4 +169,6 @@ __decorate([
     AutoBind
 ], ProjectInput.prototype, "submitHandler", null);
 const projectInput = new ProjectInput();
+const activeProjectList = new ProjectList('active');
+const finishedProjectList = new ProjectList('finished');
 //# sourceMappingURL=app.js.map
