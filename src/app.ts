@@ -61,7 +61,6 @@ interface Validatable {
     maxLength?: number;
     minValue?: number;
     maxValue?: number;
-    // [property: string]: string | boolean | number; 
 }
 function validatesProps(validatableInput: Validatable) {
     let isValid = true;
@@ -99,7 +98,14 @@ class ProjectList {
         this.element.id = `${projectType}-projects`;
 
         projectStateManagement.addListener((projects: Project[]) => {
-            this.assignedProjects = projects;
+            const relevantProjects = projects.filter(project => {
+                if (this.projectType === 'active') {
+                    return project.status === ProjectStatus.Active;
+                };
+                return project.status === ProjectStatus.Finished;
+            });
+
+            this.assignedProjects = relevantProjects;
             this.renderProjects();
         })
         this.attach();
@@ -108,6 +114,7 @@ class ProjectList {
 
     private renderProjects() {
         const listElement = document.getElementById(`${this.projectType}-projects-list`) as HTMLUListElement;
+        listElement.innerHTML = '';
         for (const projectItem of this.assignedProjects) {
             const listItem = document.createElement('li');
             listItem.textContent = projectItem.title;
