@@ -97,6 +97,20 @@ class Component {
         this.hostElement.insertAdjacentElement(insertAtStart ? "afterbegin" : "beforeend", this.element);
     }
 }
+class ProjectItem extends Component {
+    constructor(hostElementId, projectItem) {
+        super("single-project", hostElementId, false, projectItem.id);
+        this.hostElementId = hostElementId;
+        this.projectItem = projectItem;
+        this.renderContent();
+    }
+    configure() { }
+    renderContent() {
+        this.element.querySelector('h2').innerHTML = `<strong>Project: </strong> ${this.projectItem.title}`;
+        this.element.querySelector('h3').innerHTML = `<strong>Number of people: </strong> ${this.projectItem.people.toString()}`;
+        this.element.querySelector('p').innerHTML = `<strong>Desciption: </strong> ${this.projectItem.description}`;
+    }
+}
 class ProjectList extends Component {
     constructor(projectType) {
         super('project-list', 'app', false, `${projectType}-projects`);
@@ -106,12 +120,10 @@ class ProjectList extends Component {
         this.renderContent();
     }
     renderProjects() {
-        const listElement = document.getElementById(`${this.projectType}-projects-list`);
-        listElement.innerHTML = '';
+        const listEl = document.getElementById(`${this.projectType}-projects-list`);
+        listEl.innerHTML = '';
         for (const projectItem of this.assignedProjects) {
-            const listItem = document.createElement('li');
-            listItem.textContent = projectItem.title;
-            listElement === null || listElement === void 0 ? void 0 : listElement.appendChild(listItem);
+            new ProjectItem(this.element.querySelector('ul').id, projectItem);
         }
     }
     configure() {
@@ -130,7 +142,7 @@ class ProjectList extends Component {
     renderContent() {
         const listId = `${this.projectType}-projects-list`;
         this.element.querySelector('ul').id = listId;
-        this.element.querySelector('h2').textContent = this.projectType.toUpperCase() + ' PROJECTS';
+        this.element.querySelector('h1').textContent = this.projectType.toUpperCase() + ' PROJECTS';
     }
 }
 class ProjectInput extends Component {
