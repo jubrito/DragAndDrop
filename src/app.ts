@@ -115,19 +115,22 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
 
 class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
 
-    // private templateId: string;
     constructor (public hostElementId: string, public projectItem: Project){
         super("single-project", hostElementId, false, projectItem.id);
         this.renderContent();
-
     }
-
+    get persons() {
+        if (this.projectItem.people === 1) {
+            return "1 person";
+        } 
+        return `${this.projectItem.people} persons`;
+    }
     configure() {}
 
     renderContent(): void {
-        this.element.querySelector('h2')!.innerHTML = `<strong>Project: </strong> ${this.projectItem.title}`;
-        this.element.querySelector('h3')!.innerHTML = `<strong>Number of people: </strong> ${this.projectItem.people.toString()}`;
-        this.element.querySelector('p')!.innerHTML = `<strong>Desciption: </strong> ${this.projectItem.description}`;
+        this.element.querySelector('h2')!.innerHTML = this.projectItem.title;
+        this.element.querySelector('h3')!.innerHTML = this.persons + ' assigned';
+        this.element.querySelector('p')!.innerHTML = this.projectItem.description;
     }
 }
 

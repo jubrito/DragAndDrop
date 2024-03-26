@@ -104,11 +104,17 @@ class ProjectItem extends Component {
         this.projectItem = projectItem;
         this.renderContent();
     }
+    get persons() {
+        if (this.projectItem.people === 1) {
+            return "1 person";
+        }
+        return `${this.projectItem.people} persons`;
+    }
     configure() { }
     renderContent() {
-        this.element.querySelector('h2').innerHTML = `<strong>Project: </strong> ${this.projectItem.title}`;
-        this.element.querySelector('h3').innerHTML = `<strong>Number of people: </strong> ${this.projectItem.people.toString()}`;
-        this.element.querySelector('p').innerHTML = `<strong>Desciption: </strong> ${this.projectItem.description}`;
+        this.element.querySelector('h2').innerHTML = this.projectItem.title;
+        this.element.querySelector('h3').innerHTML = this.persons + ' assigned';
+        this.element.querySelector('p').innerHTML = this.projectItem.description;
     }
 }
 class ProjectList extends Component {
