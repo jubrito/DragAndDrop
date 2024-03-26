@@ -103,6 +103,7 @@ class ProjectItem extends Component {
         this.hostElementId = hostElementId;
         this.projectItem = projectItem;
         this.renderContent();
+        this.configure();
     }
     get persons() {
         if (this.projectItem.people === 1) {
@@ -110,13 +111,28 @@ class ProjectItem extends Component {
         }
         return `${this.projectItem.people} persons`;
     }
-    configure() { }
+    dragStartHandler(event) {
+        console.log('event', event);
+    }
+    dragEndHandler(_event) {
+        console.log('DragEnd');
+    }
+    configure() {
+        this.element.addEventListener('dragstart', this.dragStartHandler);
+        this.element.addEventListener('dragend', this.dragEndHandler);
+    }
     renderContent() {
         this.element.querySelector('h2').innerHTML = this.projectItem.title;
         this.element.querySelector('h3').innerHTML = this.persons + ' assigned';
         this.element.querySelector('p').innerHTML = this.projectItem.description;
     }
 }
+__decorate([
+    AutoBind
+], ProjectItem.prototype, "dragStartHandler", null);
+__decorate([
+    AutoBind
+], ProjectItem.prototype, "dragEndHandler", null);
 class ProjectList extends Component {
     constructor(projectType) {
         super('project-list', 'app', false, `${projectType}-projects`);

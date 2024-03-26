@@ -1,3 +1,14 @@
+interface Dragabble {
+    dragStartHandler(event: DragEvent): void;
+    dragEndHandler(event: DragEvent): void;
+}
+
+interface DragTarget {
+    dragOverHandler(event: DragEvent): void // allows dropping
+    dropHandler(event: DragEvent): void // handle the drop and update data
+    dragLeaveHandler(event: DragEvent): void // what happens after dropping
+}
+
 enum ProjectStatus { Active, Finished };
 class Project {
     constructor(public id: string, public title: string, public description: string, public people: number, public status: ProjectStatus) {
@@ -113,11 +124,12 @@ abstract class Component<T extends HTMLElement, U extends HTMLElement> {
     abstract renderContent(): void;
 }
 
-class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
+class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Dragabble {
 
     constructor (public hostElementId: string, public projectItem: Project){
         super("single-project", hostElementId, false, projectItem.id);
         this.renderContent();
+        this.configure();
     }
     get persons() {
         if (this.projectItem.people === 1) {
@@ -125,13 +137,26 @@ class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> {
         } 
         return `${this.projectItem.people} persons`;
     }
-    configure() {}
+
+    @AutoBind
+    dragStartHandler(event: DragEvent): void {
+        console.log('event', event);
+    }
+    @AutoBind
+    dragEndHandler(_event: DragEvent): void {
+        console.log('DragEnd')
+    }
+    configure() {
+        this.element.addEventListener('dragstart', this.dragStartHandler);
+        this.element.addEventListener('dragend', this.dragEndHandler);
+    }
 
     renderContent(): void {
         this.element.querySelector('h2')!.innerHTML = this.projectItem.title;
         this.element.querySelector('h3')!.innerHTML = this.persons + ' assigned';
         this.element.querySelector('p')!.innerHTML = this.projectItem.description;
     }
+
 }
 
 class ProjectList extends Component<HTMLDivElement, HTMLElement>{
