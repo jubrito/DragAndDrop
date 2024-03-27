@@ -42,9 +42,22 @@ class ProjectStateManagement extends State<Project>{
     }
 
 
-    public addProject(title: string, description: string, numberOfPeople: number){
+    addProject(title: string, description: string, numberOfPeople: number){
         const newProject = new Project(Math.random().toString(), title, description, numberOfPeople, ProjectStatus.Active);
         this.projects.push(newProject);
+        this.updateListeners();
+        
+    }
+
+    moveProject(projectId: string, newStatus: ProjectStatus) {
+        const projectToBeMoved = this.projects.find(project => project.id === projectId)
+        if (projectToBeMoved && projectToBeMoved.status !== newStatus) {
+            projectToBeMoved.status = newStatus;
+            this.updateListeners();
+        }
+    }
+
+    private updateListeners() {
         for (const listernerFn of this.listeners) {
             const projectsCopy = this.projects.slice()
             listernerFn(projectsCopy); 
@@ -189,8 +202,10 @@ class ProjectList extends Component<HTMLDivElement, HTMLElement> implements Drag
         }
     }
 
+    @AutoBind
     dropHandler(event: DragEvent): void {
-        console.log('event', event.dataTransfer!.getData('text/plain'));
+        const projectId =  event.dataTransfer!.getData('text/plain');
+        projectStateManagement.moveProject(projectId, this.projectType === 'active' ? ProjectStatus.Active : ProjectStatus.Finished);
     }
 
     @AutoBind
