@@ -9,7 +9,7 @@
     <script type="module" src="dist/bundle.js"></script>
   </head>
   <body>
-    <h1>Project Manager</h1>
+    <h1></h1>
     <template id="project-input">
       <form>
         <div class="form-control">
@@ -43,5 +43,8 @@
       </section>
     </template>
     <div id="app"></div>
+    <script>
+      var GLOBAL = 'This will run after the main script because that contains the defer property'
+    </script>
   </body>
 </html>
