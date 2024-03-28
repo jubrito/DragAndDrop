@@ -1,11 +1,7 @@
-/// <reference path="base.ts" />
-/// <reference path="../decorators/autobind.ts" />
-/// <reference path="../models/project.ts" />
-/// <reference path="../models/drag-drop.ts" />
-import { Dragabble } from '../models/drag-drop.js';
-import { AutoBind } from '../decorators/autobind.js';
-import { Project } from '../models/project.js';
-import Component from './base.js';
+import { Dragabble } from '../models/drag-drop';
+import { AutoBind } from '../decorators/autobind';
+import { Project } from '../models/project';
+import Component from './base';
 
 export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Dragabble {
     constructor (public hostElementId: string, public projectItem: Project){
