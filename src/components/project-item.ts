@@ -5,7 +5,7 @@
 import { Dragabble } from '../models/drag-drop.js';
 import { AutoBind } from '../decorators/autobind.js';
 import { Project } from '../models/project.js';
-import { Component } from './base.js';
+import Component from './base.js';
 
 export class ProjectItem extends Component<HTMLUListElement, HTMLLIElement> implements Dragabble {
     constructor (public hostElementId: string, public projectItem: Project){
